@@ -33,11 +33,11 @@ This checks:
 ## Step 3: Test N8N Connection
 
 1. Open [N8N Cloud](https://app.n8n.cloud)
-2. Click **Add Workflow** > **Import from File**
-3. Select `workflows/00-test-connection.json`
-4. Click **Import**
-5. Click **Test Workflow** (play button)
-6. See "Success" in the output
+2. Create a new workflow (+ button or "Add workflow")
+3. Click **...** menu (top right) → **Import from File**
+4. Select `workflows/00-test-connection.json` from your repo
+5. Click **Execute Workflow** button (bottom center of canvas)
+6. Click **Executions** tab (top) → click the run → click node to see output
 
 ## Step 4: Verify API Access
 
@@ -64,7 +64,7 @@ If all steps completed successfully, you're ready for class.
 |-------|----------|
 | `setup.sh` permission denied | Run `chmod +x setup.sh` first |
 | N8N import fails | Check JSON file isn't corrupted |
-| Gemini API error | Verify billing is enabled on Google Cloud |
+| Gemini API error | Re-copy key from aistudio.google.com (no extra spaces) |
 | "Credential not found" in N8N | Create credential before testing workflow |
 
 See [troubleshooting-quick-ref.md](troubleshooting-quick-ref.md) for more.
