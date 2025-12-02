@@ -136,6 +136,27 @@ See `docs/api-keys-setup.md` for detailed setup instructions.
 
 ---
 
+### 10. GitHub CLI (Recommended)
+
+The GitHub CLI makes cloning and updating the course repo much easier.
+
+**Install GitHub CLI:**
+- **Mac:** `brew install gh` (or download from [cli.github.com](https://cli.github.com))
+- **Windows:** Download from [cli.github.com](https://cli.github.com)
+
+**Authenticate (one-time setup):**
+1. Open Terminal (Mac) or Command Prompt (Windows)
+2. Run: `gh auth login`
+3. Select: GitHub.com
+4. Select: HTTPS
+5. Select: Login with a web browser
+6. Press Enter, copy the code shown
+7. Browser opens - paste the code and authorize
+
+**Why:** This one-time setup means you can clone and update repos without managing tokens or passwords.
+
+---
+
 ## Pre-Class Checklist Summary
 
 Check off everything above. If you get stuck, post in Slack with:

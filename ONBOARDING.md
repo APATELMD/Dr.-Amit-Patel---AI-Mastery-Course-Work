@@ -1,7 +1,124 @@
 # Onboarding Guide
 
 > Complete these steps to arrive at class ready to build.
-> **Estimated time:** 42 minutes
+> **Estimated time:** 60-90 minutes
+
+---
+
+## What You're Building
+
+By the end of this setup, you'll have the infrastructure for a complete AI customer service system:
+
+**The Email Flow:**
+- Customer emails arrive → AI reads and understands them
+- AI checks your knowledge base for the right information
+- AI drafts a response in YOUR brand voice
+- You get a Slack ping: "Here's what I want to send. Approve?"
+- You respond: "Looks good" or "Make it friendlier"
+- AI sends the email and logs everything
+
+**What This System Includes:**
+- 📧 Email processing with smart filtering
+- 📚 Knowledge base with your FAQs, policies, products
+- 🎯 Brand voice that sounds like YOU, not a robot
+- 💬 Slack notifications so you stay in control
+- 🧠 Memory of past conversations
+- ✅ Nothing sends without your approval
+
+**The Honest Truth:**
+This kind of system traditionally requires a developer, months of work, and thousands of dollars. You're going to build it by having conversations with AI.
+
+The tools we're setting up today are your construction crew. Once ready, you become the architect.
+
+---
+
+## Why Each Tool Matters
+
+| Tool | What It Does | Why You Need It |
+|------|--------------|-----------------|
+| **VS Code + Claude Code** | Your AI coding assistant | Builds workflows by conversation |
+| **Claude Desktop** | Strategic AI partner | Remembers context, plans with you |
+| **N8N Cloud** | Workflow automation | Connects everything together |
+| **Google AI Studio** | Knowledge base search | Finds info from your docs |
+| **OpenRouter** | AI model access | Powers the agents in N8N |
+| **Slack** | Human-in-the-loop | Keeps you in control |
+
+---
+
+## About Permission Prompts (Don't Worry!)
+
+During setup, Claude Code will ask for permissions. Here's what they mean:
+
+| Prompt | What It Means | Why It's Safe |
+|--------|---------------|---------------|
+| "Run bash command?" | Execute a terminal command | Only runs what you approve |
+| "Read file?" | Look at a file | Can't change without asking |
+| "Write file?" | Create/update a file | You see exactly what changes |
+
+**You're always in control.** Nothing happens without your approval. These are normal development permissions that every developer grants.
+
+---
+
+## Time Expectation
+
+**Plan for 60-90 minutes** for full setup.
+
+| Phase | Time |
+|-------|------|
+| Steps 1-2 (Clone + Verify) | 5-10 min |
+| Steps 3-4 (Claude Desktop + Code) | 15-20 min |
+| Step 5 (Bridge Test) | 5 min |
+| Step 6 (N8N Test) | 10-15 min |
+| Step 7 (Gemini Test) | 5 min |
+| Troubleshooting buffer | 20-30 min |
+
+**If you get stuck:** Screenshot the issue and stop. We'll troubleshoot together on Wednesday's session and Friday's office hours. No need to struggle alone!
+
+---
+
+## The First Day Prompt
+
+Once you have VS Code open with the repo folder loaded, paste this prompt into Claude Code to begin:
+
+```
+## AI Mastery First Day Setup
+
+I just received the course materials for MindValley AI Mastery. Session 1 is December 3rd.
+
+**IMPORTANT CONTEXT:**
+- I'm a NON-TECHNICAL student - explain everything simply
+- If you need to run commands, briefly explain what they do first
+- If I seem confused, ask me for a screenshot
+- The permissions you ask for are safe - I understand you need them to help me
+
+**The GitHub repo is:**
+https://github.com/8Dvibes/mindvalley-ai-mastery-students
+
+**My current situation:**
+- I have VS Code open with the Claude Code extension installed
+- I downloaded the repo ZIP and unzipped it (OR I cloned it with git)
+- I opened the folder in VS Code
+- I'm now pasting this prompt into Claude Code
+
+**Please help me in this order:**
+
+1. **Prerequisites Check** - Do I have git and GitHub CLI installed? If not, help me install them.
+2. **Folder Location** - Is this repo in a good location? If it's in Downloads, help me move it to ~/GitHub/
+3. **Run setup.sh** - Verify my environment
+4. **Account Check** - Walk me through SETUP.md to confirm I have all required accounts
+5. **ONBOARDING Steps 3-7** - Guide me through Claude Desktop config, Claude Code config, Bridge test, N8N test, and Gemini test
+
+**When asking for bash/terminal permissions:**
+- Briefly explain what the command does
+- Then proceed (I trust you)
+
+**What I'm building (so I understand the why):**
+I'm setting up tools that will let me build an AI customer service system - one that reads emails, drafts responses in my brand voice, checks with me before sending, and learns over time. This setup gets all the infrastructure ready.
+
+Let's start with the prerequisites check!
+```
+
+Claude Code will guide you through the rest!
 
 ---
 
@@ -9,18 +126,25 @@
 
 - [ ] Complete the [Pre-Class Checklist](SETUP.md) first
 - [ ] Have your API keys and passwords ready
-- [ ] Set aside 45 uninterrupted minutes
+- [ ] Set aside 90 uninterrupted minutes
 
 ---
 
-## Step 1: Clone the Repo (2 min)
+## Step 1: Get the Course Repository (2 min)
 
-Open your terminal (Mac: Terminal app, Windows: Command Prompt or PowerShell).
+**Option A: GitHub CLI (Recommended)**
+1. Open Terminal (Mac) or Command Prompt (Windows)
+2. Create a GitHub folder: `mkdir -p ~/GitHub && cd ~/GitHub`
+3. Clone the repo: `gh repo clone 8Dvibes/mindvalley-ai-mastery-students`
+4. Enter the folder: `cd mindvalley-ai-mastery-students`
 
-```bash
-git clone https://github.com/8Dvibes/mindvalley-ai-mastery-students.git
-cd mindvalley-ai-mastery-students
-```
+**Option B: ZIP Download (Alternative)**
+1. Go to https://github.com/8Dvibes/mindvalley-ai-mastery-students
+2. Click green "Code" button → "Download ZIP"
+3. Unzip to ~/GitHub/ or ~/Documents/ (NOT Downloads!)
+4. Open Terminal and navigate to the folder
+
+**Why Option A is better:** You'll be able to pull updates with `git pull` as the course progresses.
 
 **Verify it worked:**
 ```bash
@@ -37,8 +161,10 @@ workflows/
 ```
 
 **Troubleshooting:**
+- `gh: command not found` → Install GitHub CLI from [cli.github.com](https://cli.github.com), then run `gh auth login`
 - `git: command not found` → Install Git from [git-scm.com](https://git-scm.com/downloads)
 - `Repository not found` → Check the URL, or ask in Slack for access
+- ZIP download: Make sure you unzip to a permanent location (NOT Downloads folder)
 
 ---
 
@@ -269,6 +395,6 @@ Congratulations! You've completed the onboarding process.
 
 ---
 
-**Total time:** ~42 minutes
+**Total time:** 60-90 minutes
 
 See you in Session 1!

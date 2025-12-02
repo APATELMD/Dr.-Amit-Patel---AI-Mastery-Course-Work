@@ -2,12 +2,20 @@
 
 Get up and running fast. For detailed setup, see [SETUP.md](../SETUP.md).
 
-## Step 1: Clone the Repository
+## Step 1: Get the Repository
 
+**Option A: GitHub CLI (Recommended)**
 ```bash
-git clone https://github.com/8Dvibes/mindvalley-ai-mastery-students.git
+mkdir -p ~/GitHub && cd ~/GitHub
+gh repo clone 8Dvibes/mindvalley-ai-mastery-students
 cd mindvalley-ai-mastery-students
 ```
+
+**Option B: ZIP Download**
+1. Go to https://github.com/8Dvibes/mindvalley-ai-mastery-students
+2. Click green "Code" button → "Download ZIP"
+3. Unzip to ~/GitHub/ (NOT Downloads!)
+4. Open the folder in VS Code
 
 ## Step 2: Verify Your Environment
 
@@ -46,7 +54,7 @@ If all steps completed successfully, you're ready for class.
 
 ### Next Steps
 
-- Review [ONBOARDING.md](../ONBOARDING.md) - 42-minute video walkthrough
+- Review [ONBOARDING.md](../ONBOARDING.md) - 60-90 minute full setup
 - Browse `demo/hattieb/` - See a complete working example
 - Check `guides/session-1/` - Read Session 1 materials
 

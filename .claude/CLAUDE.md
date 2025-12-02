@@ -18,7 +18,7 @@ Help students set up their environment and complete course exercises. Be patient
 ## Key Files (in order of importance)
 
 1. **SETUP.md** - Account creation checklist (do this first)
-2. **ONBOARDING.md** - 42-minute walkthrough (do before class)
+2. **ONBOARDING.md** - 60-90 minute walkthrough (do before class)
 3. **docs/quick-start.md** - 5-minute fast path
 4. **docs/ai-assisted-setup-guide.md** - Comprehensive help for every step
 5. **docs/troubleshooting-quick-ref.md** - Common issues and fixes
@@ -36,6 +36,86 @@ Help students set up their environment and complete course exercises. Be patient
 ├── guides/               # Session-specific materials
 └── demo/hattieb/         # Complete working example
 ```
+
+## First Day Prompt
+
+When a student pastes a "First Day" prompt or says they're setting up for the first time, here's the complete prompt they should use:
+
+```markdown
+## AI Mastery First Day Setup
+
+I just received the course materials for MindValley AI Mastery. Session 1 is December 3rd.
+
+**IMPORTANT CONTEXT:**
+- I'm a NON-TECHNICAL student - explain everything simply
+- If you need to run commands, briefly explain what they do first
+- If I seem confused, ask me for a screenshot
+- The permissions you ask for are safe - I understand you need them to help me
+
+**The GitHub repo is:**
+https://github.com/8Dvibes/mindvalley-ai-mastery-students
+
+**My current situation:**
+- I have VS Code open with the Claude Code extension installed
+- I downloaded the repo ZIP and unzipped it (OR I cloned it with git)
+- I opened the folder in VS Code
+- I'm now pasting this prompt into Claude Code
+
+**Please help me in this order:**
+
+1. **Prerequisites Check** - Do I have git and GitHub CLI installed? If not, help me install them.
+2. **Folder Location** - Is this repo in a good location? If it's in Downloads, help me move it to ~/GitHub/
+3. **Run setup.sh** - Verify my environment
+4. **Account Check** - Walk me through SETUP.md to confirm I have all required accounts
+5. **ONBOARDING Steps 3-7** - Guide me through Claude Desktop config, Claude Code config, Bridge test, N8N test, and Gemini test
+
+**When asking for bash/terminal permissions:**
+- Briefly explain what the command does
+- Then proceed (I trust you)
+
+**What I'm building (so I understand the why):**
+I'm setting up tools that will let me build an AI customer service system - one that reads emails, drafts responses in my brand voice, checks with me before sending, and learns over time. This setup gets all the infrastructure ready.
+
+Let's start with the prerequisites check!
+```
+
+---
+
+## Onboarding Prerequisites
+
+When helping a student onboard, **check these prerequisites FIRST** before proceeding:
+
+### 1. GitHub CLI Installed?
+```bash
+gh --version
+```
+If not found → Guide them: `brew install gh` (Mac) or download from cli.github.com (Windows)
+
+### 2. GitHub CLI Authenticated?
+```bash
+gh auth status
+```
+If not logged in → Guide through: `gh auth login` (device code flow - much easier than PAT tokens)
+
+### 3. Proper Folder Location?
+Check the current working directory path:
+- ✅ Good: `~/GitHub/`, `~/Documents/`, `~/Desktop/`
+- ❌ Bad: `~/Downloads/` → Help them move the folder first!
+
+To move from Downloads:
+```bash
+mkdir -p ~/GitHub
+mv ~/Downloads/mindvalley-ai-mastery-students-main ~/GitHub/mindvalley-ai-mastery
+cd ~/GitHub/mindvalley-ai-mastery
+```
+
+### 4. Git Installed?
+```bash
+git --version
+```
+Mac users may need Xcode CLI tools: `xcode-select --install` (takes 5-10 min)
+
+---
 
 ## How to Help Students
 
