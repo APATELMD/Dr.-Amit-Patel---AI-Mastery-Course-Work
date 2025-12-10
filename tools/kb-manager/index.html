@@ -1974,7 +1974,8 @@
       try {
         hideModal();
         addToLog('↻', `Creating store: ${name}...`);
-        const newStore = await createStore(name);
+        const response = await createStore(name);
+        const newStore = response.corpus || response.store || response;
         state.stores.push(newStore);
         state.currentStore = newStore.name;
         localStorage.setItem('current_store', state.currentStore);
