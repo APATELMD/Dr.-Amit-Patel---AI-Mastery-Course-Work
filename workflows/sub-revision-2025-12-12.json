@@ -1,0 +1,107 @@
+{
+  "updatedAt": "2025-12-12T14:50:41.000Z",
+  "createdAt": "2025-12-01T19:01:04.732Z",
+  "id": "SElCzAg6yvRghOSP",
+  "name": "SUB: Revision Processor - Hattie B's HITL",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "5b90d0d7-4e0f-4a5f-a0d0-61764ba24557",
+      "name": "Execute Workflow Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [0, 0],
+      "notes": "Triggered by W2 Approval Handler when REVISE intent detected"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "set-execution-id",
+              "name": "execution_id",
+              "value": "={{ $json.execution_id }}",
+              "type": "string"
+            },
+            {
+              "id": "set-revision-count",
+              "name": "revision_count",
+              "value": "={{ $json.revision_count }}",
+              "type": "number"
+            },
+            {
+              "id": "set-human-feedback",
+              "name": "human_feedback",
+              "value": "={{ $json.human_feedback }}",
+              "type": "string"
+            },
+            {
+              "id": "set-original-email",
+              "name": "original_email",
+              "value": "={{ $json.original_email }}",
+              "type": "object"
+            },
+            {
+              "id": "set-previous-draft",
+              "name": "previous_draft",
+              "value": "={{ $json.previous_draft }}",
+              "type": "string"
+            },
+            {
+              "id": "set-cinnamon",
+              "name": "cinnamon_analysis",
+              "value": "={{ typeof $json.cinnamon_analysis === 'string' ? JSON.parse($json.cinnamon_analysis) : $json.cinnamon_analysis }}",
+              "type": "object"
+            },
+            {
+              "id": "set-hatch",
+              "name": "hatch_analysis",
+              "value": "={{ $json.hatch_analysis }}",
+              "type": "string"
+            },
+            {
+              "id": "set-temporal-now",
+              "name": "current_datetime",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "set-temporal-day",
+              "name": "day_of_week",
+              "value": "={{ $now.format('EEEE') }}",
+              "type": "string"
+            },
+            {
+              "id": "set-temporal-holiday",
+              "name": "is_holiday_season",
+              "value": "={{ ['11', '12', '01'].includes($now.format('MM')) }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "06b6b8e3-6665-4457-95b0-c148a4b2f7ef",
+      "name": "Prepare Revision Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [224, 0],
+      "notes": "Extracts and normalizes all inputs for the revision chain"
+    }
+  ],
+  "connections": {
+    "Execute Workflow Trigger": {
+      "main": [[{"node": "Prepare Revision Context", "type": "main", "index": 0}]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "updatedAt": "2025-12-12T16:49:01.476Z",
+  "createdAt": "2025-12-01T19:00:25.590Z",
+  "id": "mYpexsjCtMEja9Os",
+  "name": "W1: Email Processing Pipeline (Hattie B's HITL)",
+  "description": null,
+  "active": false,
+  "isArchived": false,
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "550f7a46-6cd9-46b0-a42d-4128d437629a",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -3104,
+        240
+      ],
+      "notes": "For testing without real emails. Click 'Test Workflow' to run with sample data."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "demo-mode",
+              "name": "DEMO_MODE",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "slack-channel",
+              "name": "SLACK_CHANNEL",
+              "value": "#hattieb-approvals",
+              "type": "string"
+            },
+            {
+              "id": "sheet-id",
+              "name": "SHEET_ID",
+              "value": "1xTng5h4vCWzFRtEvs05FX1lwguB6Mob-2G_LTgicn4I",
+              "type": "string"
+            },
+            {
+              "id": "max-revisions",
+              "name": "MAX_REVISIONS",
+              "value": 3,
+              "type": "number"
+            },
+            {
+              "id": "qa-threshold",
+              "name": "QA_PASS_THRESHOLD",
+              "value": 70,
+              "type": "number"
+            },
+            {
+              "id": "timezone",
+              "name": "TIMEZONE",
+              "value": "America/Chicago",
+              "type": "string"
+            },
+            {
+              "id": "reviewer-name",
+              "name": "REVIEWER_NAME",
+              "value": "Tyler",
+              "type": "string"
+            },
+            {
+              "id": "business-name",
+              "name": "BUSINESS_NAME",
+              "value": "Hattie B's Hot Chicken",
+              "type": "string"
+            },
+            {
+              "id": "librarian-workflow-id",
+              "name": "LIBRARIAN_WORKFLOW_ID",
+              "value": "hAUZlEDljnO7uXnT",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8a3c04f5-51dd-4cd3-996a-46f7ee3ca573",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2880,
+        144
+      ],
+      "notes": "CONFIGURE YOUR SYSTEM HERE\n========================\n1. Set DEMO_MODE to false for production (actually sends emails)\n2. Update SLACK_CHANNEL with your approval channel\n3. Add your SHEET_ID from Google Sheets URL\n4. Add your Gemini CORPUS_ID\n5. Set REVIEWER_NAME for Holler greetings\n6. Add LIBRARIAN_WORKFLOW_ID after importing the Librarian workflow"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "datetime",
+              "name": "current_datetime",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "day",
+              "name": "day_of_week",
+              "value": "={{ $now.format('EEEE') }}",
+              "type": "string"
+            },
+            {
+              "id": "holiday",
+              "name": "is_holiday_season",
+              "value": "={{ ['11', '12', '01'].includes($now.format('MM')) }}",
+              "type": "boolean"
+            },
+            {
+              "id": "execution-id",
+              "name": "execution_id",
+              "value": "={{ $execution.id }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "8f3b7ea9-3acb-48ef-b95c-741a8be5398c",
+      "name": "Temporal Context",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2656,
+        144
+      ],
+      "notes": "Injects current date/time for all agents.\nUsed to prevent outdated training data assumptions."
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "subject",
+              "name": "email_subject",
+              "value": "={{ $('When Called by Filter').first().json.subject || $input.first().json.subject || 'Question about wait times' }}",
+              "type": "string"
+            },
+            {
+              "id": "body",
+              "name": "email_body",
+              "value": "={{ $('When Called by Filter').first().json.body || $input.first().json.text || $input.first().json.body || 'Hi! I waited 2 hours at your Midtown location on Saturday. Is there a way to avoid such long waits? Thanks, Sarah' }}",
+              "type": "string"
+            },
+            {
+              "id": "sender",
+              "name": "customer_email",
+              "value": "={{ $('When Called by Filter').first().json.from || $input.first().json.from || 'customer@example.com' }}",
+              "type": "string"
+            },
+            {
+              "id": "thread-id",
+              "name": "gmail_thread_id",
+              "value": "={{ $('When Called by Filter').first().json.thread_id || $input.first().json.threadId || $input.first().json.thread_id || 'sample-thread-123' }}",
+              "type": "string"
+            },
+            {
+              "id": "message-id",
+              "name": "gmail_message_id",
+              "value": "={{ $('When Called by Filter').first().json.email_id || $input.first().json.id || $input.first().json.email_id || 'sample-message-123' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b9e68243-cd49-4ece-9326-0832b3faa4e6",
+      "name": "Extract Email Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2432,
+        144
+      ],
+      "notes": "Extracts email fields with fallback sample data for testing."
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze the following customer email:\n\nSubject: {{ $json.email_subject }}\nBody: {{ $json.email_body }}\nFrom: {{ $json.customer_email }}",
+        "options": {
+          "systemMessage": "<s>\n<version_info>\nName: CinnaM0n (Sentiment Analysis Intelligence)\nVersion: 1.0\nDate: 2024-11-18\nNickname Origin: Named after the spice that adds warmth and complexity to any mixture\nPurpose: Perform comprehensive emotional and contextual analysis of customer communications\n</version_info>\n\n<role>\nYou are CinnaM0n, an advanced sentiment analysis agent with a warm personality and keen\nemotional intelligence. Like your namesake spice, you add depth and nuance to the analysis\nof customer communications. Your purpose is to provide rich, layered understanding of\ncustomer messages, ensuring that no emotional undertone or contextual clue goes undetected.\n</role>\n\n<capabilities>\n1. Emotional Analysis:\n   - Primary emotion identification\n   - Secondary emotion detection\n   - Emotional intensity measurement (0-10 scale)\n   - Emotional progression tracking throughout message\n   - Underlying emotional subtext detection\n\n2. Contextual Understanding:\n   - Business context interpretation\n   - Technical knowledge recognition\n   - Cultural consideration analysis\n   - Urgency assessment\n   - Priority level determination\n\n3. Communication Style Analysis:\n   - Formality level assessment\n   - Technical expertise indication\n   - Communication preference identification\n   - Response style recommendation\n</capabilities>\n\n<output_format>\nReturn your analysis as JSON:\n{\n  \"sentiment\": \"positive|negative|neutral|mixed\",\n  \"emotional_spectrum\": {\n    \"primary\": \"[main emotion]\",\n    \"secondary\": \"[secondary emotion if any]\",\n    \"intensity\": [0-10]\n  },\n  \"urgency\": [1-5],\n  \"themes\": [\"theme1\", \"theme2\"],\n  \"business_impact\": \"low|medium|high\",\n  \"recommended_tone\": \"[suggested response tone]\",\n  \"summary\": \"[one sentence summary of customer state]\"\n}\n</output_format>\n</s>"
+        }
+      },
+      "id": "59329c4c-0ee3-4848-8afb-867c4e15f222",
+      "name": "CinnaMon (Sentiment)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1984,
+        144
+      ],
+      "notes": "Sentiment analysis agent. Analyzes customer emotional state.\nModel: Claude 3.5 Haiku, Temperature: 0.25"
+    },
+    {
+      "parameters": {
+        "options": {
+          "temperature": 0.25,
+          "maxTokensToSample": 2000
+        }
+      },
+      "id": "fee19753-ff88-4c0f-82fd-e605db30fd8d",
+      "name": "CinnaMon Model",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        -1984,
+        368
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "id": "lauTekowPX3kl6EG",
+          "name": "Anthropic account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse CinnaMon's output\nconst input = $input.first().json;\nconst output = input.output || input.text || '';\n\nlet parsed;\ntry {\n  // Try to extract JSON from response\n  const jsonMatch = output.match(/\\{[\\s\\S]*\\}/);\n  if (jsonMatch) {\n    parsed = JSON.parse(jsonMatch[0]);\n  } else {\n    throw new Error('No JSON found');\n  }\n} catch (e) {\n  // Fallback to neutral defaults\n  parsed = {\n    sentiment: 'neutral',\n    emotional_spectrum: { primary: 'curious', secondary: null, intensity: 5 },\n    urgency: 3,\n    themes: ['general inquiry'],\n    business_impact: 'medium',\n    recommended_tone: 'friendly, helpful',\n    summary: 'Customer inquiry requiring response'\n  };\n}\n\n// Merge with previous data\nconst prevData = $('Extract Email Data').first().json;\nconst temporal = $('Temporal Context').first().json;\nconst settings = $('Settings').first().json;\n\nreturn [{\n  json: {\n    ...prevData,\n    ...temporal,\n    settings: settings,\n    cinnamon_analysis: parsed\n  }\n}];"
+      },
+      "id": "cd86bd12-144b-4569-b945-7b6e31f27148",
+      "name": "Parse CinnaMon",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1632,
+        144
+      ],
+      "notes": "Parses CinnaMon's JSON output with fallback defaults."
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Analyze this customer inquiry:\n\nEmail Subject: {{ $json.email_subject }}\nEmail Body: {{ $json.email_body }}\nCustomer: {{ $json.customer_email }}\n\nCinnaMon's Sentiment Analysis:\n{{ JSON.stringify($json.cinnamon_analysis, null, 2) }}\n\nTemporal Context:\n- Current DateTime: {{ $json.current_datetime }}\n- Day: {{ $json.day_of_week }}\n- Holiday Season: {{ $json.is_holiday_season }}\n\nUse your tools to gather relevant information, then provide your analysis.",
+        "options": {
+          "systemMessage": "<s>\n<version_info>\nName: Hatch (Expert Agent)\nVersion: 1.0\nDate: 2025-11-27\nBusiness: Hattie B's Hot Chicken\nPurpose: Analyze customer inquiries and synthesize KB + web information for email drafting\n</version_info>\n\n<role>\nYou are Hatch, the Expert Agent for Hattie B's Hot Chicken. Like the careful\nprocess of \"hatching\" perfectly seasoned chicken, you methodically analyze customer inquiries\nand gather the right information to prepare context for email responses.\n\nYou are NOT the email writer. You are the ANALYST who:\n- Understands what the customer is really asking\n- Retrieves relevant information from the knowledge base\n- Searches the web for current information when needed\n- Synthesizes everything into actionable context for the email drafter\n\nYour output goes to Sugar (YGM), who will craft the actual response.\n</role>\n\n<business_context>\nYou serve Hattie B's Hot Chicken, a Nashville institution known for:\n- Nashville hot chicken (heat levels: Southern, Mild, Medium, Hot, Damn Hot, Shut the Cluck Up)\n- Multiple locations: Nashville (5 locations), Atlanta, Memphis, Birmingham, Las Vegas\n- Flagship: 112 19th Ave S, Nashville (original Midtown location)\n- Founded 2012 by Nick Bishop Jr. and Nick Bishop Sr.\n- COOP Club loyalty program\n- Catering services available\n- Known for long wait times at popular locations\n\nCore values: Southern hospitality, quality ingredients, community connection\nTone: Friendly, warm, genuine - never corporate or stiff\n</business_context>\n\n<tools>\nYou have two information retrieval tools:\n\n1. **search_knowledge_base** (Librarian)\n   - Use for: Company policies, menu details, FAQ, brand guidelines, standard procedures\n   - Source of truth for: Refund policies, ingredient info, catering procedures, gift cards\n   - This is INTERNAL company documentation\n\n2. **web_search** (Exa)\n   - Use for: CURRENT information that may change\n   - Triggers: Prices, hours (especially holidays), wait times, recent news, availability\n   - This searches the EXTERNAL web\n\nDecision tree:\n- Policies, procedures, refunds -> Librarian\n- Menu items, ingredients, heat levels -> Librarian\n- **Current hours, holiday schedule** -> Web search\n- **Wait times, busy periods** -> Web search\n- **Current prices, promotions** -> Web search\n- **Recent news, events** -> Web search\n</tools>\n\n<output_format>\nProvide structured analysis as JSON:\n{\n  \"customer_analysis\": {\n    \"core_question\": \"[What they're really asking]\",\n    \"emotional_state\": \"[From CinnaMon]\",\n    \"urgency\": [1-5]\n  },\n  \"information_retrieved\": {\n    \"from_kb\": {\n      \"found\": true/false,\n      \"content\": \"[relevant info]\",\n      \"source\": \"[document name]\"\n    },\n    \"from_web\": {\n      \"found\": true/false,\n      \"content\": \"[relevant info]\",\n      \"source\": \"[URL]\",\n      \"date\": \"[when accessed]\",\n      \"confidence\": \"High/Medium/Low\"\n    }\n  },\n  \"recommended_approach\": {\n    \"tone\": \"[suggested tone]\",\n    \"key_points\": [\"point1\", \"point2\"],\n    \"resolution\": \"[how to resolve]\",\n    \"caveats\": \"[any uncertainties]\"\n  },\n  \"draft_guidance\": \"[specific notes for Sugar]\",\n  \"temporal_flags\": {\n    \"time_sensitive_info_used\": true/false,\n    \"verified_via\": \"web search / KB / both / N/A\",\n    \"verification_date\": \"[today's date if web searched]\",\n    \"caveats\": \"[any temporal uncertainties]\"\n  }\n}\n</output_format>\n\n<criteria>\n1. THOROUGH RETRIEVAL: Search both KB and web when appropriate\n2. SOURCE ATTRIBUTION: Always note where information came from\n3. CUSTOMER FOCUS: Everything leads to helping the customer\n4. BRAND VOICE PREP: Give Sugar what they need for authentic Hattie B's tone\n5. UNCERTAINTY HONESTY: If you're not sure, say so\n6. RESOLUTION ORIENTATION: Every response should move toward resolution\n7. TEMPORAL AWARENESS: Never state time-sensitive info from training data as fact\n</criteria>\n</s>",
+          "maxIterations": 10
+        }
+      },
+      "id": "bc611aee-630f-4a52-8458-dcf28bac1409",
+      "name": "Hatch (Expert)",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -1360,
+        144
+      ],
+      "notes": "Expert Agent with KB + Web search tools.\nOrchestrates Librarian and Exa for information gathering.\nModel: Claude Sonnet 4.5, Temperature: 0.3"
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "Temporal Context",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Temporal Context": {
+      "main": [
+        [
+          {
+            "node": "Extract Email Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract Email Data": {
+      "main": [
+        [
+          {
+            "node": "CinnaMon (Sentiment)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CinnaMon (Sentiment)": {
+      "main": [
+        [
+          {
+            "node": "Parse CinnaMon",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse CinnaMon": {
+      "main": [
+        [
+          {
+            "node": "Hatch (Expert)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  }
+}
