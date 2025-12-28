@@ -1,0 +1,22 @@
+# Environment variables and API keys
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.log
+
+# Scripts with API keys (use .env instead)
+add_files_to_corpus.py
+upload_docs_gemini.py
+upload_to_gemini.py
+test_kb_query.sh
